@@ -1,13 +1,23 @@
-# A Lean formalization of the WGARP rationalization theorem
+# WGARP in Lean
 
-This repository formalizes Theorem 1 of *A Rationalization of the Weak
-Axiom of Revealed Preference* by Victor H. Aguiar, Per Hjertstrand,
-Roberto Serrano, and Özgür Evren.  It follows the proof plan retained after
-the REStat editorial decision: the WGARP characterization is in scope;
-the removed non-emptiness/Theorem 3 material is not.
+This public Lean package formalizes the finite revealed-preference results in
+the retained main text of *A Rationalization of the Weak Axiom of Revealed
+Preference* by Victor H. Aguiar, Per Hjertstrand, Roberto Serrano, and Özgür
+Evren. It also includes Theorem 2 on `k`-acyclicity and the Nakamura number as
+an explicit author-requested extension beyond the core retained after the
+REStat editorial meeting.
 
-The main declaration is `WGARP.theorem_one` in `WGARP/TheoremOne.lean`.  It
-connects the six conditions in the paper:
+The two headline declarations are:
+
+- `WGARP.theorem_one` in `WGARP/TheoremOne.lean`, the six-way WGARP
+  characterization; and
+- `WGARP.theorem_two` in `WGARP/TheoremTwo.lean`, the exact equivalence between
+  `k`-acyclicity and finite CMU rationalization with Nakamura threshold
+  `k + 1`, for every `k ≥ 2`.
+
+## Checked mathematical scope
+
+Theorem 1 connects the following six conditions:
 
 1. rationalization by a continuous, asymmetric preference function that is
    strictly increasing in its first argument;
@@ -18,31 +28,57 @@ connects the six conditions in the paper:
 5. the pairwise Afriat inequalities; and
 6. the pairwise Varian sign inequalities.
 
-The existence claims in (2) and (3) are stated in the constructive normal
-forms used by the paper's proof.  These are conservative strengthenings of
-the corresponding unrestricted existence statements.
+The package also checks the other formal claims used or stated in the retained
+main text:
 
-## Editorial proof gaps addressed
+- the full finite GARP/Afriat equivalence, including a continuous, concave,
+  strictly increasing global utility and positive Afriat multipliers;
+- Lemma 1 for finite and compact-parameter CMUs: continuity and strict
+  monotonicity in both comparison arguments;
+- the asymmetry-necessity lemma, the coherence lemma, and the symmetric-matrix
+  CMU lemma, including numerical skew-symmetry via Sion minimax;
+- Lemma 5, the compensated law of demand, together with its stated converse
+  for strict cross-affordability;
+- Lemma 6 for justifiable preferences, both as a relational demand dichotomy
+  and as the attained numeric compact-maximum representation; and
+- the main-text finite examples: WGARP without GARP, compensated-law failure,
+  the average-budget empty-demand calculation, supermajority voting, and the
+  coherent but cyclic and incomplete three-moods CMU.
 
-The formalization makes the formerly implicit steps explicit:
-
-- The inner minimum is witnessed at the improved bundle and the outer
-  maximum at the original bundle.  Compactness/continuity (or finiteness)
-  supplies both witnesses; mere pointwise well-definedness is not used.
-- Coherence proves the stronger numerical inequality
-  `r x y + r y x ≤ 0`, covering the zero boundary as well as strict
-  asymmetry.
-- The one-observation case is handled by the diagonal pair utility, with no
-  `T ≥ 2` or `T ≥ 3` shortcut.
-- Each two-observation utility is built directly from pairwise Afriat
-  numbers, so the proof does not hide a WGARP-to-GARP conversion.
-- Continuity, concavity, strict monotonicity, symmetry, coherence, and
-  rationalization of mixed utilities are separate checked lemmas.
-- Numerical skew-symmetry uses Mathlib's formal Sion minimax theorem on the
-  finite standard simplex.
+For Theorem 2, a cycle is a list of exactly `k` observations and repetitions
+are allowed, matching the manuscript convention. `NakamuraAtLeast Ω n` says
+that every collection of fewer than `n` coalitions has a common agent, so it
+also covers the conventional infinite Nakamura number. The sufficiency proof
+constructs agents from all nonempty observation subsets of cardinality at most
+`k`; the converse applies to an arbitrary finite CMU satisfying the stated
+threshold. The regression theorem `WGARP.kAcyclic_two_iff_wgarp` verifies that
+the case `k = 2` is exactly WGARP. The four-observation example following
+Theorem 2 is also checked exactly: it is `3`-acyclic but violates GARP through
+the displayed length-four cycle.
 
 See [docs/PROOF_MAP.md](docs/PROOF_MAP.md) for the declaration-level map and
 [docs/REVISION_SCOPE.md](docs/REVISION_SCOPE.md) for the editorial boundary.
+
+## Proof gaps made explicit
+
+The formalization exposes several steps that were compressed in the prose:
+
+- The inner minimum is witnessed at the improved bundle and the outer maximum
+  at the original bundle. Compactness/continuity (or finiteness) supplies both
+  witnesses.
+- Coherence proves the stronger numerical inequality
+  `r x y + r y x ≤ 0`, including the zero boundary needed for asymmetry.
+- The one-observation case is handled by the diagonal pair utility, with no
+  hidden `T ≥ 2` shortcut.
+- The global Afriat construction uses an explicit reachability rank and a
+  finite lower envelope; each pairwise utility is also constructed directly
+  from pairwise certificates.
+- Lemma 6 includes compact demand sets, utility-demand existence, Walras
+  exhaustion, upper hemicontinuity, Hahn–Banach separation, and the vanishing
+  price perturbation used to produce the two strict cross-budget inequalities.
+- The `k`-acyclicity/GARP restriction bridge includes explicit directed-walk
+  loop erasure and padding, rather than assuming that cycle witnesses are
+  injective.
 
 ## Reproducing the check
 
@@ -54,27 +90,35 @@ lake build
 ```
 
 The repository pins Lean `v4.32.0-rc1` and Mathlib commit
-`a3364faec42918fcd84a03a255b50570129f9ead`.  GitHub Actions performs the
-same build and rejects `sorry`, `admit`, and project-defined axioms.
+`a3364faec42918fcd84a03a255b50570129f9ead`. The GitHub Actions workflow is
+configured to run the build and reject `sorry`, `admit`, and project-defined
+axioms.
 
-## Scope
+## Modeling boundary
 
-Bundles are represented by vectors in `ℝ^L`; feasible bundles are
-coordinatewise nonnegative, prices are strictly positive, observed bundles
-are nonzero, `L ≥ 2`, and the observation type is finite and nonempty.  The
-paper's notation `x > z` means coordinatewise weak dominance plus inequality.
-The Lean definition `StrictDominates` deliberately does not use the stronger
-product `<` order.  `WGARP/Singleton.lean` checks every statement when there is
-exactly one observation.
+Bundles are vectors in `ℝ^L`; feasible bundles are coordinatewise
+nonnegative, prices are strictly positive, observed bundles are nonzero,
+`L ≥ 2`, and observation types in the headline results are finite and
+nonempty. The manuscript notation `x > z` means coordinatewise weak dominance
+plus inequality. Accordingly, Lean's `StrictDominates` is deliberately not the
+stronger product `<` order.
 
 Utilities and preference functions are extended to all of `ℝ^L`, and their
-continuity, concavity, and monotonicity are proved on that ambient space.  This
-is a conservative strengthening of the paper, whose consumption domain is
-the nonnegative orthant; rationalization itself is still quantified only over
-nonnegative affordable bundles.
+regularity is often proved on that ambient space. This conservatively
+strengthens the manuscript's nonnegative consumption-domain statements;
+rationalization and demand still quantify only over nonnegative affordable
+bundles.
 
-The package formalizes the compact CMUs actually used in Theorem 1 through
-compact parameter spaces.  It does not reconstruct the paper's entire
-compact-convergence topology on `C(X)` or the Hausdorff hyperspace of every
-possible abstract coalition family; those general topological interfaces
-are not needed for the theorem's constructed witnesses.
+The compact CMU results use explicit compact parameter spaces, which cover the
+CMUs needed here without reconstructing the full compact-convergence topology
+on `C(X)` or the Hausdorff hyperspace of every abstract coalition family.
+
+The classical global Varian-numbering statement quoted as background in the
+manuscript is treated as an external result, rather than a target of this
+package. The pairwise Varian certificate appearing inside Theorem 1 remains
+part of that theorem's already checked six-way equivalence.
+
+The former Theorem 3/nonemptiness result, former Section 6 on optimization and
+duality, and the separate WARP development are deliberately excluded. The
+finite average-budget theorem is an empty-demand counterexample, not the
+excluded universal nonemptiness theorem.
