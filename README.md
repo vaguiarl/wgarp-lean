@@ -1,11 +1,15 @@
 # WGARP in Lean
 
-This public Lean package formalizes the finite revealed-preference results in
-the retained main text of *A Rationalization of the Weak Axiom of Revealed
+This public Lean package provides companion formalizations of finite
+revealed-preference results in the retained main text of *A Rationalization of the Weak Axiom of Revealed
 Preference* by Victor H. Aguiar, Per Hjertstrand, Roberto Serrano, and Özgür
 Evren. It also includes Theorem 2 on `k`-acyclicity and the Nakamura number as
 an explicit author-requested extension beyond the core retained after the
 REStat editorial meeting.
+
+The mathematical proofs were developed by the authors. This package provides
+supplementary machine verification of the statements and constructions
+specified below.
 
 The two headline declarations are:
 
@@ -28,8 +32,7 @@ Theorem 1 connects the following six conditions:
 5. the pairwise Afriat inequalities; and
 6. the pairwise Varian sign inequalities.
 
-The package also checks the other formal claims used or stated in the retained
-main text:
+Additional checked results include:
 
 - the full finite GARP/Afriat equivalence, including a continuous, concave,
   strictly increasing global utility and positive Afriat multipliers;
@@ -59,26 +62,17 @@ the displayed length-four cycle.
 See [docs/PROOF_MAP.md](docs/PROOF_MAP.md) for the declaration-level map and
 [docs/REVISION_SCOPE.md](docs/REVISION_SCOPE.md) for the editorial boundary.
 
-## Proof gaps made explicit
+## Formalization notes
 
-The formalization exposes several steps that were compressed in the prose:
+Following Özgür Evren’s clarification, the accompanying note confirms the
+manuscript’s arguments for Lemmas 1(ii), 3, and 6. Lemma 1 uses attained
+minima and maxima, with compactness and continuity established in part (i).
+The Lean proofs record those witnesses explicitly. The additional numerical
+bound `r x y + r y x ≤ 0` supplements the manuscript’s valid asymmetry argument.
 
-- The inner minimum is witnessed at the improved bundle and the outer maximum
-  at the original bundle. Compactness/continuity (or finiteness) supplies both
-  witnesses.
-- Coherence proves the stronger numerical inequality
-  `r x y + r y x ≤ 0`, including the zero boundary needed for asymmetry.
-- The one-observation case is handled by the diagonal pair utility, with no
-  hidden `T ≥ 2` shortcut.
-- The global Afriat construction uses an explicit reachability rank and a
-  finite lower envelope; each pairwise utility is also constructed directly
-  from pairwise certificates.
-- Lemma 6 includes compact demand sets, utility-demand existence, Walras
-  exhaustion, upper hemicontinuity, Hahn–Banach separation, and the vanishing
-  price perturbation used to produce the two strict cross-budget inequalities.
-- The `k`-acyclicity/GARP restriction bridge includes explicit directed-walk
-  loop erasure and padding, rather than assuming that cycle witnesses are
-  injective.
+The one-page [proof clarifications](output/pdf/surgical_proof_audit_2026-09-11.pdf)
+([LaTeX source](output/pdf/surgical_proof_audit_2026-09-11.tex)) supersede the
+earlier audit’s overstated gap diagnoses and propose only brief local edits.
 
 ## Reproducing the check
 
@@ -118,7 +112,8 @@ manuscript is treated as an external result, rather than a target of this
 package. The pairwise Varian certificate appearing inside Theorem 1 remains
 part of that theorem's already checked six-way equivalence.
 
-The former Theorem 3/nonemptiness result, former Section 6 on optimization and
-duality, and the separate WARP development are deliberately excluded. The
+The Appendix A convexity example is not encoded. The former Theorem
+3/nonemptiness result, former Section 6 on optimization and duality, and the
+separate WARP development are deliberately excluded. The
 finite average-budget theorem is an empty-demand counterexample, not the
 excluded universal nonemptiness theorem.

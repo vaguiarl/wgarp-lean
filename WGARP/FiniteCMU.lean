@@ -12,11 +12,8 @@ multi-utility (CMU) construction
 
 `r x y = max S, min i in S, (u i x - u i y)`.
 
-The proofs of strict monotonicity deliberately use agents and coalitions
-at which the finite extrema are attained.  This is the finite analogue of
-the compact-attainment argument needed in the paper's Lemma 1(ii); a
-pointwise strict inequality alone is not enough for an arbitrary infimum
-or supremum.
+Strict monotonicity follows from attained finite extrema, the finite
+counterpart of the argument in Lemma 1(ii).
 -/
 
 namespace WGARP

@@ -5,10 +5,8 @@ set_option autoImplicit false
 /-!
 # Lemma 5: the compensated law of demand
 
-The main theorem formalizes Lemma 5 of the retained main text.  Its proof is
-slightly stronger than the prose proof: it derives the needed revealed-price
-inequality directly from the two demand conditions, without importing
-Walras' law as a separate assumption.
+The main theorem formalizes Lemma 5 of the retained main text. The proof
+derives the revealed-price inequality directly from the two demand conditions.
 -/
 
 namespace WGARP

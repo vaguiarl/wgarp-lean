@@ -6,12 +6,9 @@ set_option autoImplicit false
 /-!
 # Compactly parameterized coalitional multi-utilities
 
-This file isolates the point raised in the REStat report about Lemma 1(ii).
-Pointwise infima and suprema of strictly increasing functions need not be
-strictly increasing merely because they are finite-valued.  What makes the
-CMU argument valid is **attainment** of both extrema.  The proofs below choose
-the inner minimizer at the improved bundle and the outer maximizer at the
-original bundle; compactness and continuity supply those witnesses.
+This file formalizes the attained-extrema argument in Lemma 1(ii).
+Compactness and continuity supply the minima and maxima, as established in
+part (i). The proofs below record the corresponding witnesses explicitly.
 
 The fixed compact parameter sets are exactly the form needed by the
 mixed-strategy construction in `WGARP.MatrixCMU`.
@@ -178,9 +175,8 @@ theorem compactCMU_continuous
   simpa only [compactCMU] using
     hK.continuous_sSup (compactCoalitionScore_continuous hJ hu)
 
-/-- The corrected REStat Lemma 1(ii), first argument.  Both extrema are
-attained, and the proof uses the minimizing/maximizing witnesses on the
-correct sides of the strict comparison. -/
+/-- Lemma 1(ii) for compact parameter spaces, first argument.
+Compactness and continuity supply attained extrema. -/
 theorem compactCMU_strictlyIncreasingFirst
     {K : Set A} (hK : IsCompact K) (hneK : K.Nonempty)
     {J : Set B} (hJ : IsCompact J) (hneJ : J.Nonempty)

@@ -1,0 +1,44 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern,microtype}
+\usepackage[letterpaper,margin=0.8in]{geometry}
+\usepackage{amsmath,amssymb,hyperref}
+\hypersetup{colorlinks=true,urlcolor=black,
+ pdftitle={Brief Proof Clarifications},
+ pdfauthor={Prepared for the WGARP coauthors}}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{7pt}
+\begin{document}
+{\Large\bfseries Brief proof clarifications}\hfill September 11, 2026
+
+Following \"Ozg\"ur Evren's clarification, Lemma 1(ii) uses attained minima and maxima, with the required compactness and continuity established in part (i). The earlier audit overstated this and other valid arguments as gaps. This note supersedes those assessments; the authors' proof strategies and conclusions are retained.
+
+\textbf{Lemmas 1(ii) and 3.}
+For the response to the editor, it suffices to make attainment explicit in Lemma 1(ii):
+\begin{quote}\small
+For fixed $x,y$, evaluation differences $u\mapsto u(x)-u(y)$ are continuous in the compact-convergence topology, and each $U$ is nonempty and compact, so the inner minimum is attained. By part (i), $U\mapsto r(U,x,y)$ is continuous; compactness of $\Omega$ therefore gives an attained outer maximum.
+\end{quote}
+In Lemma 3, one may simply recall that the outer maximum is attained. The manuscript's sign argument then applies as written; the stronger numerical inequality proved in Lean need not replace it.
+
+\textbf{Theorem 1: small samples.}
+Before the $T\geq3$ construction, one may add: for $T\leq2$, WGARP implies GARP, so Afriat's theorem supplies a continuous, concave, strictly increasing rationalizer $u$; the singleton coalition structure $\{\{u\}\}$ gives (ii) and (iii). For $T=1$, (v) holds with $R^{1,1}=0$ and $\lambda^1_{1,1}=1$, so its remaining proof may assume $T\geq2$.
+
+\textbf{Lemma 6.}
+No replacement proof is needed. Positive rescaling of the separator justifies the price normalization; compact-valued upper hemicontinuity justifies the convergent-subsequence step in finite dimension.
+
+\textbf{Local copy corrections.}
+At line 1349, replace $p^k$ by $p^s$. Remove duplicated opening parentheses at lines 722, 1329 and 1339, and the duplicated \emph{for every} at line 1260.
+
+\textbf{Theorem 2: separate extension.}
+Two local edits preserve the exact-$k$ construction. State the Nakamura threshold as
+$\nu(\Omega)\geq n$ if and only if every subfamily of fewer than $n$ coalitions has nonempty intersection (line 830). At line 1440, enlarge the set of \emph{representing observation indices}, rather than the coalition subfamily, to a $k$-element set $S$; then $u_S$ belongs to every represented coalition, including when different indices define the same coalition. Cycle indices may repeat.
+
+\textbf{Lean companion.}
+The mathematical proofs were developed by the authors. The package supplies machine-checked versions of the statements and constructions listed in its proof map; it does not certify the manuscript verbatim. Theorem 1 uses finite-coalition and matrix/simplex forms; compact CMUs use parameter spaces. Global Varian numbering remains external.
+\begin{center}\small
+\url{https://github.com/vaguiarl/wgarp-lean}
+\end{center}
+{\footnotesize Line references: \texttt{WGARP\_Nov\_03\_2025.tex}, the supplied manuscript. This is a clarification note, not an edited manuscript. Detailed coverage and exclusions are recorded in the repository's proof map and revision scope.}
+\end{document}

@@ -1,8 +1,8 @@
 # REStat revision scope
 
-The package distinguishes the post-editorial retained core from one explicit
-author-requested extension. This prevents the repository from silently
-certifying results that were removed from the planned REStat revision.
+This document records the checked statements and their relation to the
+manuscript, distinguishing the post-editorial retained core from an
+author-requested extension.
 
 ## Post-editorial retained core
 
@@ -10,7 +10,7 @@ The retained formal scope contains:
 
 - the revealed-preference definitions, WGARP, GARP, and the finite global
   Afriat theorem used in the argument;
-- Theorem 1 and all six of its equivalent statements;
+- Theorem 1 through the six conditions and representations listed below;
 - the main-text CMU results: continuity and monotonicity of finite and
   compact-parameter CMUs, asymmetry from rationalization, asymmetry from
   coherence, and the symmetric-matrix/simplex skew-symmetry result;
@@ -51,6 +51,7 @@ public witness type records continuity (implicit in the paper's use of
 
 The following remain outside the package:
 
+- the Appendix A convexity example;
 - the global Varian-numbering clause quoted as classical Afriat background
   (Theorem 1's distinct pairwise Varian condition remains checked);
 - former Theorem 3 and its Schofield/core-based nonemptiness conclusion;
@@ -58,18 +59,17 @@ The following remain outside the package:
   first-order conditions, expenditure minimization, and duality; and
 - the separate WARP characterization and other online-appendix extensions.
 
-These are editorial scope decisions, not placeholders or unfinished branches
-inside the theorems exported by `WGARP.lean`.
+These are coverage boundaries, not placeholders or unfinished branches inside
+the theorems exported by `WGARP.lean`.
 
-## Formal-strengthening boundary
+## Representation and scope
 
-Several implementation choices make the checked statements more explicit or
-stronger without changing their economic conclusions:
+The checked statements use the following representations:
 
 - Theorem 1(ii) uses a finite row/column coalition family, and Theorem 1(iii)
   uses two standard simplices and a symmetric matrix of pairwise utilities.
-- Coherence yields the numerical inequality `r(x,y) + r(y,x) ≤ 0`, not only
-  the two sign implications stated in prose.
+- The package also proves the numerical consequence of coherence
+  `r(x,y) + r(y,x) ≤ 0`.
 - Lemma 6 is first proved for the relational sign content of a justifiable
   family, where compactness is unnecessary; compactness and payoff continuity
   are then used to identify that relation with an attained numerical maximum.
