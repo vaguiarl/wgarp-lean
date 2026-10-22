@@ -199,3 +199,11 @@ MathEconLib contribution. The upstream foundational port awaits maintainer
 agreement on architecture and the finite-minimax dependency needed at its
 older toolchain pin. The separate stochastic projects and the
 `k`-acyclicity/Nakamura extension are outside that initial contribution.
+
+[Design issue #202](https://github.com/matheconlib/matheconlib/issues/202)
+separately proposes the checked infinite-Afriat and logical-compactness
+extension. The new code is published on
+[`codex/infinite-afriat-compactness`](https://github.com/vaguiarl/wgarp-lean/tree/codex/infinite-afriat-compactness).
+This is a downstream implementation and an upstream design request, not an
+already merged MathEconLib contribution or a claim of compatibility with its
+older toolchain.
