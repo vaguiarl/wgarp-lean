@@ -1,3 +1,9 @@
+/-
+SPDX-License-Identifier: Apache-2.0
+This Lean source file is licensed under the Apache License, Version 2.0.
+See LICENSE-LEAN for the terms and NOTICE-LEAN for attribution.
+-/
+
 import WGARP.Data
 import WGARP.Pairwise
 import WGARP.Afriat
@@ -21,3 +27,4 @@ import WGARP.AcyclicExample
 import WGARP.Examples
 import WGARP.Voting
 import WGARP.Moods
+import WGARP.Applications

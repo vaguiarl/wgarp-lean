@@ -1,0 +1,20 @@
+WGARP Lean formalization
+Source: https://github.com/vaguiarl/wgarp-lean
+
+Mathematical attribution
+The mathematical results formalized in this package are from
+"A Rationalization of the Weak Generalized Axiom of Revealed Preference"
+by Victor H. Aguiar, Per Hjertstrand, Roberto Serrano, and Özgür Evren,
+and the classical revealed-preference literature identified in the sources.
+The mathematical proofs were developed by the authors. The Lean files
+provide supplementary machine verification; this notice does not attribute
+authorship of every Lean proof to every mathematical author.
+
+License scope
+Only the Lean source files listed in LICENSED-LEAN-FILES.txt are released
+under the Apache License, Version 2.0, whose full text is in LICENSE-LEAN.
+No license to the manuscript, LaTeX sources, PDFs, documentation, spinoff
+papers, datasets, empirical code, other unlisted files, or third-party
+dependencies is granted by this release. Dependencies retain their own
+licenses. This attribution notice adds no citation or coauthorship condition
+to the Apache License.

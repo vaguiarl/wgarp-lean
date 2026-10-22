@@ -1,3 +1,9 @@
+/-
+SPDX-License-Identifier: Apache-2.0
+This Lean source file is licensed under the Apache License, Version 2.0.
+See LICENSE-LEAN for the terms and NOTICE-LEAN for attribution.
+-/
+
 import WGARP.Pairwise
 import Mathlib.Analysis.Convex.Function
 import Mathlib.Topology.Order.Lattice

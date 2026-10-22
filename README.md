@@ -1,8 +1,9 @@
 # WGARP in Lean
 
 This public Lean package provides companion formalizations of finite
-revealed-preference results in the retained main text of *A Rationalization of the Weak Axiom of Revealed
-Preference* by Victor H. Aguiar, Per Hjertstrand, Roberto Serrano, and Özgür
+revealed-preference results in the retained main text of *A Rationalization of
+the Weak Generalized Axiom of Revealed Preference* by Victor H. Aguiar,
+Per Hjertstrand, Roberto Serrano, and Özgür
 Evren. It also includes Theorem 2 on `k`-acyclicity and the Nakamura number as
 an explicit author-requested extension beyond the core retained after the
 REStat editorial meeting.
@@ -10,6 +11,19 @@ REStat editorial meeting.
 The mathematical proofs were developed by the authors. This package provides
 supplementary machine verification of the statements and constructions
 specified below.
+
+## License: Lean source only
+
+Only the Lean source files explicitly listed in
+[LICENSED-LEAN-FILES.txt](LICENSED-LEAN-FILES.txt) are released under the
+[Apache License, Version 2.0](LICENSE-LEAN). See [NOTICE-LEAN](NOTICE-LEAN)
+for attribution. The SPDX headers in those files identify that scoped grant.
+
+This is **not a repository-wide license**. It grants no license to the
+manuscript, LaTeX sources, PDFs, documentation (including `docs/`),
+`spinoff/`, datasets, empirical code, or any other files outside that list.
+Third-party dependencies retain their own licenses. Mathematical-author
+credit is preserved; it is not an additional license condition.
 
 The two headline declarations are:
 
@@ -36,6 +50,10 @@ Additional checked results include:
 
 - the full finite GARP/Afriat equivalence, including a continuous, concave,
   strictly increasing global utility and positive Afriat multipliers;
+- concrete public-theorem applications in `WGARP/Applications.lean`: an
+  explicit two-good Afriat certificate yields a regular rationalizer, while
+  the same three-observation dataset has a coherent-CMU rationalizer but no
+  regular ordinary-utility rationalizer;
 - Lemma 1 for finite and compact-parameter CMUs: continuity and strict
   monotonicity in both comparison arguments;
 - the asymmetry-necessity lemma, the coherence lemma, and the symmetric-matrix
@@ -117,3 +135,14 @@ The Appendix A convexity example is not encoded. The former Theorem
 separate WARP development are deliberately excluded. The
 finite average-budget theorem is an empty-demand counterexample, not the
 excluded universal nonemptiness theorem.
+
+## MathEconLib contribution
+
+[Design issue #201](https://github.com/matheconlib/matheconlib/issues/201)
+proposes the complete classical Afriat theorem and the full six-way WGARP/CMU
+characterization, with shared revealed-preference infrastructure. This
+package is the checked downstream source, not an already integrated
+MathEconLib contribution. The upstream foundational port awaits maintainer
+agreement on architecture and the finite-minimax dependency needed at its
+older toolchain pin. The separate stochastic projects and the
+`k`-acyclicity/Nakamura extension are outside that initial contribution.
