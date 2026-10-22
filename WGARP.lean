@@ -28,3 +28,11 @@ import WGARP.Examples
 import WGARP.Voting
 import WGARP.Moods
 import WGARP.Applications
+import WGARP.LogicalCompactness
+import WGARP.RenyData
+import WGARP.RenyFinite
+import WGARP.RenyNormalization
+import WGARP.RenyStrictness
+import WGARP.RenyWeights
+import WGARP.InfiniteAfriat
+import WGARP.RenyInfiniteExample

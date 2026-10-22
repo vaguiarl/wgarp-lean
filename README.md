@@ -8,9 +8,11 @@ Evren. It also includes Theorem 2 on `k`-acyclicity and the Nakamura number as
 an explicit author-requested extension beyond the core retained after the
 REStat editorial meeting.
 
-The mathematical proofs were developed by the authors. This package provides
-supplementary machine verification of the statements and constructions
-specified below.
+The WGARP mathematical proofs were developed by the paper's authors. This
+package provides supplementary machine verification of the statements and
+constructions specified below. It also formalizes classical Afriat and Reny
+results and a logical-compactness scaling interface, with separate attribution
+to their original mathematical authors.
 
 ## License: Lean source only
 
@@ -25,7 +27,7 @@ manuscript, LaTeX sources, PDFs, documentation (including `docs/`),
 Third-party dependencies retain their own licenses. Mathematical-author
 credit is preserved; it is not an additional license condition.
 
-The two headline declarations are:
+The WGARP headline declarations are:
 
 - `WGARP.theorem_one` in `WGARP/TheoremOne.lean`, the six-way WGARP
   characterization; and
@@ -80,6 +82,54 @@ the displayed length-four cycle.
 See [docs/PROOF_MAP.md](docs/PROOF_MAP.md) for the declaration-level map and
 [docs/REVISION_SCOPE.md](docs/REVISION_SCOPE.md) for the editorial boundary.
 
+## Infinite Afriat and logical compactness
+
+`WGARP.infinite_reny_characterization` in
+[WGARP/InfiniteAfriat.lean](WGARP/InfiniteAfriat.lean) proves all three clauses
+of [Reny's (2015) theorem](https://doi.org/10.3982/ECTA12345): for an arbitrary
+observation type, GARP is equivalent to rationalizability and to rationalization
+by a nondecreasing, quasiconcave utility that rises strictly when **every** good
+increases. There must be at least one good; observations may be uncountably
+many or empty. Prices are nonnegative and nonzero (free goods are allowed),
+and choices and incomes may be zero. The rationalization convention includes
+strict utility comparisons for strictly cheaper alternatives. No continuity,
+concavity, or unique demand is asserted for arbitrary infinite data.
+
+The proof uses the prescribed-gap architecture of
+[Gonczarowski, Kominers, and Shorrer (2025)](https://doi.org/10.3982/TE5878),
+Theorem 8. Finite Afriat utilities are normalized by an increasing scalar
+transformation with finitely many utility-threshold steps. This retains fixed
+positive margins on countably many rational strongly ordered pairs. Closed
+constraints then have a common point in the compact product of ordinary real
+unit intervals. Density gives global semistrict monotonicity, and budget slack
+gives strict affordability. The use of scalar utility thresholds is an
+implementation adaptation, not a line-by-line transcription of the published
+proof. It requires no nonstandard real representation or limiting continuity.
+
+The supporting modules are:
+
+- `RenyData`: raw admissibility, necessity and finite character of GARP;
+- `RenyFinite`: finite Afriat with free goods, zero income and empty data;
+- `RenyNormalization`, `RenyWeights`, `RenyStrictness`: bounded normalization,
+  positive fixed margins, density and strict-affordability bridges;
+- `LogicalCompactness`: compact closed-constraint satisfiability, finite-local
+  Boolean compactness and the faithful-description/finite-subset scaling lemma;
+- `RenyInfiniteExample`: a checked client with infinitely many distinct choices,
+  a free good and an initial zero-income observation.
+
+`WGARP.LogicalCompactness.scaling_of_finite_local_description` formalizes the
+scaling interface: a faithful finite-local Boolean description plus the
+finite-subset property yields a global solution. This is not a claim that
+every economic model admits such a description. The underlying general
+compactness is reused from Mathlib, not reproved as a new first-order logic
+library. A separate infinite Boolean-chain client checks the generic interface.
+
+Verification snapshot (22 October 2026): the complete package builds
+successfully (3,066 jobs); all 20 audited compactness, bridge, terminal and
+infinite-client declarations use only `propext`, `Classical.choice` and
+`Quot.sound`. The source scan finds no unfinished proofs or project-defined
+axioms.
+
 ## Formalization notes
 
 Following Özgür Evren’s clarification, the accompanying note confirms the
@@ -108,12 +158,15 @@ axioms.
 
 ## Modeling boundary
 
-Bundles are vectors in `ℝ^L`; feasible bundles are coordinatewise
-nonnegative, prices are strictly positive, observed bundles are nonzero,
+For the finite WGARP headline results, bundles are vectors in `ℝ^L`; feasible
+bundles are coordinatewise nonnegative, prices are strictly positive, observed bundles are nonzero,
 `L ≥ 2`, and observation types in the headline results are finite and
 nonempty. The manuscript notation `x > z` means coordinatewise weak dominance
 plus inequality. Accordingly, Lean's `StrictDominates` is deliberately not the
 stronger product `<` order.
+
+The separate Reny extension uses the weaker raw-data conditions stated above;
+it does not change the finite WGARP theorem's assumptions or definitions.
 
 Utilities and preference functions are extended to all of `ℝ^L`, and their
 regularity is often proved on that ambient space. This conservatively

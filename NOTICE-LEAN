@@ -10,6 +10,17 @@ The mathematical proofs were developed by the authors. The Lean files
 provide supplementary machine verification; this notice does not attribute
 authorship of every Lean proof to every mathematical author.
 
+The infinite-data Afriat result is Philip J. Reny's (2015),
+"A Characterization of Rationalizable Consumer Behavior", Econometrica
+83(1), 175--192, doi:10.3982/ECTA12345. The logical-compactness scaling
+approach and its prescribed-gap proof architecture are due to Yannai A.
+Gonczarowski, Scott Duke Kominers, and Ran I. Shorrer (2025), "To infinity
+and beyond: A general framework for scaling economic theories",
+Theoretical Economics 20(2), 511--542, doi:10.3982/TE5878. These are prior
+results of those authors, not new economic theorems of the WGARP authors.
+The Lean implementation uses Mathlib compactness and a finite scalar
+normalization of utilities; it does not reproduce every source proof step.
+
 License scope
 Only the Lean source files listed in LICENSED-LEAN-FILES.txt are released
 under the Apache License, Version 2.0, whose full text is in LICENSE-LEAN.
