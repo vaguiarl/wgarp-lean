@@ -31,3 +31,6 @@ WGARP/Singleton.lean
 WGARP/TheoremOne.lean
 WGARP/TheoremTwo.lean
 WGARP/Voting.lean
+WGARP/AffineBasics.lean
+WGARP/ChoiceReviewBridge.lean
+WGARP/CompactnessReviewExamples.lean

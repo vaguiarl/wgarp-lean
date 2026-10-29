@@ -4,7 +4,7 @@ This Lean source file is licensed under the Apache License, Version 2.0.
 See LICENSE-LEAN for the terms and NOTICE-LEAN for attribution.
 -/
 
-import WGARP.Afriat
+import WGARP.AffineBasics
 
 set_option autoImplicit false
 

@@ -5,6 +5,7 @@ See LICENSE-LEAN for the terms and NOTICE-LEAN for attribution.
 -/
 
 import WGARP.Pairwise
+import WGARP.AffineBasics
 import Mathlib.Analysis.Convex.Function
 import Mathlib.Topology.Order.Lattice
 
@@ -30,41 +31,6 @@ open scoped BigOperators
 namespace WGARP
 
 variable {L : ℕ} {T : Type*} {D : Dataset L T}
-
-/-- Wealth at an observed price-choice pair. -/
-def wealth (D : Dataset L T) (s : T) : ℝ :=
-  expenditure D s (D.choice s)
-
-/-- A positive finite-dimensional price vector defines a strictly
-increasing expenditure functional for the paper's weak-coordinate-plus-
-inequality notion of strict dominance. -/
-theorem dot_strictlyIncreasing_of_pos
-    {p x z : Bundle L} (hp : ∀ i, 0 < p i)
-    (hxz : StrictDominates x z) :
-    dot p z < dot p x := by
-  rcases hxz with ⟨hle, hne⟩
-  have hexists : ∃ i, z i < x i := by
-    by_contra hnone
-    apply hne
-    funext i
-    have hxle : x i ≤ z i := by
-      apply le_of_not_gt
-      intro hstrict
-      exact hnone ⟨i, hstrict⟩
-    exact le_antisymm hxle (hle i)
-  unfold dot
-  apply Finset.sum_lt_sum
-  · intro i _hi
-    exact mul_le_mul_of_nonneg_left (hle i) (hp i).le
-  · obtain ⟨i, hi⟩ := hexists
-    exact ⟨i, Finset.mem_univ i, mul_lt_mul_of_pos_left hi (hp i)⟩
-
-/-- Observed expenditure is strictly increasing under strict dominance. -/
-theorem expenditure_strictlyIncreasing
-    (D : Dataset L T) (s : T) :
-    StrictlyIncreasing (expenditure D s) := by
-  intro x z hxz
-  exact dot_strictlyIncreasing_of_pos (D.price_pos s) hxz
 
 /-- The affine support associated with the ordered pair `s,t`. -/
 noncomputable def pairAffine (certificate : PairwiseAfriat D)
@@ -188,14 +154,6 @@ theorem pairUtility_rationalizes_pair
   · intro y hy
     exact pairUtility_rationalizes_second certificate s t hy
 
-/-- The finite-dimensional dot product is continuous in its second
-argument. -/
-theorem continuous_dot (p : Bundle L) : Continuous (dot p) := by
-  unfold dot
-  apply continuous_finsetSum Finset.univ
-  intro i _hi
-  exact continuous_const.mul (continuous_apply i)
-
 /-- Each supporting affine function is continuous. -/
 theorem pairAffine_continuous
     (certificate : PairwiseAfriat D) (s t : T) :
@@ -211,33 +169,6 @@ theorem pairUtility_continuous
     Continuous (pairUtility certificate s t) := by
   exact (pairAffine_continuous certificate s t).min
     (pairAffine_continuous certificate t s)
-
-/-- Linear functional represented by the package's finite dot product. -/
-def dotLinear (p : Bundle L) : Bundle L →ₗ[ℝ] ℝ where
-  toFun x := dot p x
-  map_add' x y := by
-    simp [dot, mul_add, Finset.sum_add_distrib]
-  map_smul' a x := by
-    calc
-      dot p (a • x) = ∑ i : Fin L, a * (p i * x i) := by
-        unfold dot
-        apply Finset.sum_congr rfl
-        intro i _hi
-        simp
-        ring
-      _ = a * dot p x := by
-        simp [dot, Finset.mul_sum]
-
-@[simp]
-theorem dotLinear_apply (p x : Bundle L) : dotLinear p x = dot p x := rfl
-
-/-- Dot products preserve affine combinations. -/
-theorem dot_add_smul (p x y : Bundle L) (a b : ℝ) :
-    dot p (a • x + b • y) = a * dot p x + b * dot p y := by
-  change dotLinear p (a • x + b • y) =
-    a * dotLinear p x + b * dotLinear p y
-  rw [map_add, map_smul, map_smul]
-  simp only [smul_eq_mul]
 
 /-- Exact affine-combination identity for a pair support plane. -/
 theorem pairAffine_add_smul

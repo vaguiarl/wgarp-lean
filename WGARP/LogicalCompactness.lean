@@ -15,9 +15,11 @@ Kominers, and Shorrer (2025), *To infinity and beyond: A general framework
 for scaling economic theories*, Theoretical Economics 20, 511–542,
 doi:10.3982/TE5878, Section 2 and Lemma 1.
 
-We reuse Mathlib's topological compactness theorem. A finite-local Boolean
-constraint is an arbitrary predicate of finitely many truth values; it thus
-covers every finite propositional formula without duplicating a syntax API.
+We reuse Mathlib's topological compactness theorem. The closed-constraint
+helper below is a local convenience wrapper, not a new compactness theorem
+to upstream. A finite-local constraint is an arbitrary predicate of finitely
+many values from a finite type. Its Boolean specialization covers every
+finite propositional formula without duplicating a syntax API.
 The scaling theorem transports this logical result through a faithful
 description of an economic solution concept. It does not assert that every
 finite-data theorem scales, or that a real-valued utility follows from an
@@ -26,11 +28,12 @@ arbitrary first-order model.
 
 namespace WGARP.LogicalCompactness
 
-universe u v w
+universe u v w z
 
 /-- Closed constraints on a compact space have a simultaneous solution
-provided every finite subfamily has one. This is the topological form of
-the compactness argument, reusing the existing Mathlib theorem. -/
+provided every finite subfamily has one. This is a thin local wrapper around
+Mathlib's `IsCompact.inter_iInter_nonempty`, retained for downstream
+readability and API compatibility rather than proposed as new mathematics. -/
 theorem exists_satisfying_closed_constraints
     {X : Type u} [TopologicalSpace X] [CompactSpace X]
     {I : Type v} (P : I → X → Prop)
@@ -44,8 +47,48 @@ theorem exists_satisfying_closed_constraints
       exact ⟨x, by simpa using hx⟩)
   simpa using h
 
-/-- Propositional compactness for constraints depending on finitely many
-Boolean variables. The variable and constraint sets can be arbitrary. -/
+/-- Compactness for constraints depending on finitely many variables with
+values in an arbitrary finite type. Neither the variable set nor the
+constraint set need be finite or countable. No nonempty-value assumption
+is hidden: finite feasibility, including the empty subfamily, supplies any
+assignment needed by the proof. -/
+theorem finite_local_compactness
+    {Value : Type z} [Finite Value]
+    {V : Type u} {I : Type v} {Key : I → Type w}
+    [∀ i, Finite (Key i)]
+    (vars : (i : I) → Key i → V)
+    (allowed : (i : I) → (Key i → Value) → Prop)
+    (hfinite : ∀ s : Finset I, ∃ a : V → Value,
+      ∀ i ∈ s, allowed i (fun k => a (vars i k))) :
+    ∃ a : V → Value, ∀ i, allowed i (fun k => a (vars i k)) := by
+  letI : TopologicalSpace Value := ⊥
+  letI : DiscreteTopology Value := ⟨rfl⟩
+  apply exists_satisfying_closed_constraints
+    (fun i (a : V → Value) => allowed i (fun k => a (vars i k)))
+  · intro i
+    have hc : Continuous (fun a : V → Value => fun k : Key i => a (vars i k)) :=
+      continuous_pi fun k => continuous_apply (vars i k)
+    exact (isClosed_discrete {b : Key i → Value | allowed i b}).preimage hc
+  · exact hfinite
+
+/-- A finite-valued finite-local description is satisfiable exactly when
+each finite subdescription is satisfiable. -/
+theorem finite_local_compactness_iff
+    {Value : Type z} [Finite Value]
+    {V : Type u} {I : Type v} {Key : I → Type w}
+    [∀ i, Finite (Key i)]
+    (vars : (i : I) → Key i → V)
+    (allowed : (i : I) → (Key i → Value) → Prop) :
+    (∃ a : V → Value, ∀ i, allowed i (fun k => a (vars i k))) ↔
+      ∀ s : Finset I, ∃ a : V → Value,
+        ∀ i ∈ s, allowed i (fun k => a (vars i k)) := by
+  constructor
+  · rintro ⟨a, ha⟩ s
+    exact ⟨a, fun i _hi => ha i⟩
+  · exact finite_local_compactness vars allowed
+
+/-- Propositional compactness as a specialization of finite-valued
+compactness. This preserves the original public Boolean interface. -/
 theorem finite_local_bool_compactness
     {V : Type u} {I : Type v} {Key : I → Type w}
     [∀ i, Finite (Key i)]
@@ -53,14 +96,8 @@ theorem finite_local_bool_compactness
     (allowed : (i : I) → (Key i → Bool) → Prop)
     (hfinite : ∀ s : Finset I, ∃ a : V → Bool,
       ∀ i ∈ s, allowed i (fun k => a (vars i k))) :
-    ∃ a : V → Bool, ∀ i, allowed i (fun k => a (vars i k)) := by
-  apply exists_satisfying_closed_constraints
-    (fun i (a : V → Bool) => allowed i (fun k => a (vars i k)))
-  · intro i
-    have hc : Continuous (fun a : V → Bool => fun k : Key i => a (vars i k)) :=
-      continuous_pi fun k => continuous_apply (vars i k)
-    exact (isClosed_discrete {b : Key i → Bool | allowed i b}).preimage hc
-  · exact hfinite
+    ∃ a : V → Bool, ∀ i, allowed i (fun k => a (vars i k)) :=
+  finite_local_compactness vars allowed hfinite
 
 /-- A finite-local Boolean description is satisfiable exactly when each
 finite subdescription is satisfiable. -/

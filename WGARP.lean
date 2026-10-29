@@ -5,6 +5,7 @@ See LICENSE-LEAN for the terms and NOTICE-LEAN for attribution.
 -/
 
 import WGARP.Data
+import WGARP.AffineBasics
 import WGARP.Pairwise
 import WGARP.Afriat
 import WGARP.GARP
@@ -36,3 +37,5 @@ import WGARP.RenyStrictness
 import WGARP.RenyWeights
 import WGARP.InfiniteAfriat
 import WGARP.RenyInfiniteExample
+import WGARP.ChoiceReviewBridge
+import WGARP.CompactnessReviewExamples

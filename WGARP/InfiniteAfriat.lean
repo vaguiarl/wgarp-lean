@@ -186,6 +186,26 @@ theorem finite_constraints_satisfiable (hL : 0 < L) (p q : T → Bundle L)
         (gap_mem_gapSupport s r hc) (hanchor r.lower r.lower_nonnegative)
         (hstrict r.lower r.upper r.lower_nonnegative r.upper_nonnegative r.lower_lt_upper)
 
+/-- One positive margin schedule is chosen for the full rational-pair
+family BEFORE quantifying over finite constraint subfamilies. Every finite
+witness satisfies those same prescribed margins. The schedule may vary
+across rational pairs; it may not be reselected or shrunk with `s`.
+
+This packages an invariant already present in `finite_constraints_satisfiable`
+and makes the quantifier order visible to callers of the compactness step. -/
+theorem exists_uniform_margins_and_finite_witnesses
+    (hL : 0 < L) (p q : T → Bundle L)
+    (hp : RenyPriceAdmissible p) (hq : RenyChoiceAdmissible q)
+    (hg : GraphGARP p q) :
+    ∃ w : RationalStrongPair L → ℝ,
+      (∀ r, 0 < w r) ∧
+      (∀ K : Finset (RationalStrongPair L), ∑ r ∈ K, w r ≤ 1 / 2) ∧
+      ∀ s : Finset (Constraint L T),
+        ∃ v : UtilityCube L, ∀ c ∈ s, Satisfies p q w c v := by
+  obtain ⟨w, hw, hsum⟩ := exists_rationalStrongPair_margins L
+  exact ⟨w, hw, hsum,
+    finite_constraints_satisfiable hL p q hp hq hg w (fun r => (hw r).le) hsum⟩
+
 /-- All closed utility requirements have a common point in a standard-real
 compact cube. The margins here are fixed before finite witnesses are chosen. -/
 theorem exists_cube_satisfying_all_constraints (hL : 0 < L) (p q : T → Bundle L)
@@ -240,9 +260,10 @@ theorem infiniteRenyRationalization_of_graphGARP
     (hL : 0 < L) (p q : T → Bundle L)
     (hp : RenyPriceAdmissible p) (hq : RenyChoiceAdmissible q)
     (hg : GraphGARP p q) : HasRegularRenyRationalization p q := by
-  obtain ⟨w, hw, hsum⟩ := exists_rationalStrongPair_margins L
-  obtain ⟨v, hv⟩ := InfiniteAfriat.exists_cube_satisfying_all_constraints hL p q hp hq hg w
-    (fun r => (hw r).le) hsum
+  obtain ⟨w, hw, _hsum, hfinite⟩ :=
+    InfiniteAfriat.exists_uniform_margins_and_finite_witnesses hL p q hp hq hg
+  obtain ⟨v, hv⟩ := LogicalCompactness.exists_satisfying_closed_constraints
+    (InfiniteAfriat.Satisfies p q w) (InfiniteAfriat.satisfies_isClosed p q w) hfinite
   exact ⟨InfiniteAfriat.cubeUtility v,
     InfiniteAfriat.regular_rationalization_of_satisfying_constraints p q hp w hw v hv⟩
 
